@@ -8,6 +8,12 @@
   <meta property="og:title" content="berrylink">
   <meta property="og:description" content="K-Beauty Brand Production Agency for CIS &amp; Islamic Markets">
   <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="assets/images/favicon/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/images/favicon/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/images/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#000000">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -18,6 +24,7 @@
   <link rel="stylesheet" href="assets/css/sections/visual.css">
   <link rel="stylesheet" href="assets/css/sections/brands.css">
   <link rel="stylesheet" href="assets/css/sections/footer.css">
+  <link rel="stylesheet" href="assets/css/sections/dotnav.css">
 </head>
 <body>
   <!-- ========== HEADER / LANG (Figma 10:10) ========== -->
@@ -30,6 +37,16 @@
       </ul>
     </nav>
   </header>
+  
+  <!-- ========== DOT NAV (우측 중앙 고정 · 3구간) ==========
+       data-dot-target 섹션 기준: 홈(hero) / 소개(intro+visual) / 파트너(brands+footer) -->
+  <nav class="dot-nav" aria-label="Section">
+    <ul class="dot-nav__list">
+      <li><a class="dot-nav__link is-active" href="#top" data-dot-target="top" aria-current="true"><span class="dot-nav__label" data-i18n="nav.home">Home</span></a></li>
+      <li><a class="dot-nav__link" href="#about" data-dot-target="about"><span class="dot-nav__label" data-i18n="nav.about">About</span></a></li>
+      <li><a class="dot-nav__link" href="#brands" data-dot-target="brands"><span class="dot-nav__label" data-i18n="nav.partners">Partners</span></a></li>
+    </ul>
+  </nav>
 
 <main>
   <!-- ========== HERO (Figma 1:34) ========== -->

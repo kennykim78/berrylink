@@ -144,7 +144,34 @@
     update();
   }
 
+  /* ---------- dot nav: 현재 구간 표시 ----------
+     화면 중앙선을 지난 마지막 [data-dot-target] 섹션을 활성화
+     (visual 은 about 구간, footer 는 brands 구간에 포함) */
+  function initDotNav() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('[data-dot-target]'));
+    if (!links.length) return;
+    var secs = links.map(function (a) { return document.getElementById(a.getAttribute('data-dot-target')); });
+    function update() {
+      var mid = window.innerHeight * 0.5, idx = 0;
+      secs.forEach(function (sec, i) { if (sec && sec.getBoundingClientRect().top <= mid) idx = i; });
+      links.forEach(function (a, i) {
+        var on = i === idx;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      });
+    }
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
   initReveal();
+  initDotNav();
   initScrollScale();
   initPins();
   initHeroVideo();

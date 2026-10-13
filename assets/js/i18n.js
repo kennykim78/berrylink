@@ -6,6 +6,9 @@
 
   var DICT = {
     en: {
+      'nav.home': 'Home',
+      'nav.about': 'About',
+      'nav.partners': 'Partners',
       'meta.title': 'berrylink | K‑Beauty Brand Production Agency for CIS & Islamic Markets',
       'hero.tagline': 'K‑Beauty Brand Production Agency<br class="hero__br"> for CIS &amp; Islamic Markets',
       'intro.title': 'Debuting K‑Beauty Brands as Stars in the CIS and Islamic Regions.',
@@ -16,6 +19,9 @@
       'footer.seoul.addr': '210 2nd F/L 10, Nambusunhwan-ro 333-gil, Seocho-gu, Seoul, Rep. of KOREA'
     },
     ko: {
+      'nav.home': '홈',
+      'nav.about': '소개',
+      'nav.partners': '파트너',
       'meta.title': 'berrylink | CIS·이슬람권 특화 K‑뷰티 브랜드 기획사',
       'hero.tagline': 'CIS·이슬람권 특화 K‑뷰티 브랜드 기획사',
       'intro.title': '당신의 K‑뷰티 브랜드를 CIS와 이슬람권의 스타로 만들어 드립니다.',
@@ -26,6 +32,9 @@
       'footer.seoul.addr': '서울특별시 서초구 남부순환로333길 10, 2층 210호'
     },
     ru: {
+      'nav.home': 'Главная',
+      'nav.about': 'О нас',
+      'nav.partners': 'Партнёры',
       'meta.title': 'berrylink | Продюсерское агентство K‑Beauty брендов для стран СНГ и исламского мира',
       'hero.tagline': 'Продюсерское агентство K‑Beauty брендов<br class="hero__br"> для стран СНГ и исламского мира',
       'intro.title': 'Продюсируем K‑Beauty бренды, делая их звездами в СНГ и исламских странах.',
