@@ -1,0 +1,37 @@
+# berrylink — robots.txt
+# 검색엔진·AI 검색/답변 크롤러 모두 허용 (인용·노출 목적)
+
+User-agent: *
+Allow: /
+Disallow: /_figma/
+Disallow: /_partials/
+
+# AI search / assistants
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# Regional search engines (KR / CIS)
+User-agent: Yeti
+Allow: /
+User-agent: Yandex
+Allow: /
+
+Sitemap: https://berrylink.io/sitemap.xml

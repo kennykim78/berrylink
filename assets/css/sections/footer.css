@@ -36,3 +36,12 @@
 @media (max-width:480px){
   .site-footer__mail{white-space:normal;word-break:break-all}
 }
+
+/* copyright — 주소(서울 사무소) 하단 */
+.site-footer__copy{
+  font-size:clamp(12px,.73vw,14px);
+  font-weight:400;
+  line-height:normal;
+  color:#777;
+}
+.site-footer__copy small{font-size:inherit}

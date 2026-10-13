@@ -1,44 +1,4 @@
 #!/usr/bin/env bash
-# _partials/*.html 를 index.html 로 조립 (섹션 수정 후 재실행)
-cd "$(dirname "$0")"
-{
-cat <<'HEAD'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>berrylink | K-Beauty Brand Production Agency for CIS &amp; Islamic Markets</title>
-  <meta name="description" content="Berrylink exclusively manages and produces K-Beauty brands for a successful debut in the CIS and Islamic markets.">
-  <meta property="og:title" content="berrylink">
-  <meta property="og:description" content="K-Beauty Brand Production Agency for CIS &amp; Islamic Markets">
-  <meta property="og:type" content="website">
-  <link rel="icon" href="favicon.ico" sizes="48x48">
-  <link rel="icon" href="assets/images/favicon/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="assets/images/favicon/favicon-32.png" type="image/png" sizes="32x32">
-  <link rel="apple-touch-icon" href="assets/images/favicon/apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#000000">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="assets/css/reset.css">
-  <link rel="stylesheet" href="assets/css/common.css">
-HEAD
-for f in hero intro visual brands footer dotnav; do
-  [ -f "assets/css/sections/$f.css" ] && echo "  <link rel=\"stylesheet\" href=\"assets/css/sections/$f.css\">"
-done
-echo '</head>'
-echo '<body>'
-sed 's/^/  /' _partials/00_header.html; echo
-echo '<main>'
-for p in _partials/0[1-4]_*.html; do sed 's/^/  /' "$p"; echo; done
-echo '</main>'
-sed 's/^/  /' _partials/05_footer.html 2>/dev/null
-echo
-echo '  <script src="assets/js/i18n.js" defer></script>'
-echo '  <script src="assets/js/main.js" defer></script>'
-echo '</body>'
-echo '</html>'
-} > index.html
-echo "built index.html ($(wc -l < index.html) lines)"
+# _partials/*.html + _i18n.json → 정적 HTML (index.html · ko/index.html · ru/index.html · sitemap.xml)
+# 결과물은 순수 HTML 파일. Node 는 조립 도구로만 사용 (배포 서버/프레임워크 불필요)
+cd "$(dirname "$0")" && node _build.mjs

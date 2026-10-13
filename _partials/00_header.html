@@ -2,9 +2,10 @@
 <header class="site-header">
   <nav class="site-header__lang" aria-label="Language">
     <ul class="site-header__list">
-      <li><button type="button" class="site-header__link" data-lang="ko" lang="ko" aria-pressed="false" aria-label="한국어">KO</button></li>
-      <li><button type="button" class="site-header__link is-active" data-lang="en" lang="en" aria-pressed="true" aria-label="English">EN</button></li>
-      <li><button type="button" class="site-header__link" data-lang="ru" lang="ru" aria-pressed="false" aria-label="Русский">RU</button></li>
+      <!-- href / is-active 는 빌드(_build.mjs)가 페이지 언어별로 채움 -->
+      <li><a class="site-header__link" data-lang-link="ko" hreflang="ko" lang="ko" aria-label="한국어">KO</a></li>
+      <li><a class="site-header__link" data-lang-link="en" hreflang="en" lang="en" aria-label="English">EN</a></li>
+      <li><a class="site-header__link" data-lang-link="ru" hreflang="ru" lang="ru" aria-label="Русский">RU</a></li>
     </ul>
   </nav>
 </header>
