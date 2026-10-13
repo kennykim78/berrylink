@@ -168,6 +168,7 @@
     }, { passive: true });
     window.addEventListener('resize', update);
     update();
+
   }
 
   initReveal();

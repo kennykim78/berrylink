@@ -1,32 +1,54 @@
 /* ========== DOT NAV — 우측 중앙 고정, 3구간 ==========
+   기본: 현재 구간 점 1개만 표시 → 점(네비) hover / 키보드 포커스 시 3개로 펼쳐짐
    mix-blend-mode:difference → 검정 배경에선 흰 점, 흰 푸터 위에선 검정 점 */
 .dot-nav{
+  --dot-hit:22px;                            /* 점 1개 히트 영역 */
+  --dot-gap:18px;
   position:fixed;
   top:50%;
   right:clamp(14px,2.1vw,40px);
   z-index:30;
   transform:translateY(-50%);
   mix-blend-mode:difference;
+  padding:8px;                               /* hover 유지 여유 */
 }
-.dot-nav__list{display:flex;flex-direction:column;gap:18px}
+.dot-nav__list{display:flex;flex-direction:column}
+.dot-nav__list > li{
+  position:relative;
+  transition:margin-top .4s cubic-bezier(.2,.7,.2,1);
+}
+/* 접힘: 점들을 한 자리에 겹침 */
+.dot-nav__list > li + li{margin-top:calc(var(--dot-hit) * -1)}
 .dot-nav__link{
   position:relative;
   display:block;
-  width:22px;height:22px;                    /* 터치 영역 */
+  width:var(--dot-hit);height:var(--dot-hit);
 }
 .dot-nav__link::before{
   content:"";
   position:absolute;top:50%;left:50%;
   width:8px;height:8px;
-  border:1px solid #fff;
+  background:#333;                           /* 비활성: 작은 #333 원 */
   border-radius:50%;
   transform:translate(-50%,-50%);
-  transition:width .3s ease,height .3s ease,background-color .3s ease;
+  transition:width .3s ease,height .3s ease,background-color .3s ease,opacity .3s ease;
 }
-.dot-nav__link:hover::before,
-.dot-nav__link:focus-visible::before{background:rgba(255,255,255,.5)}
 .dot-nav__link.is-active::before{width:12px;height:12px;background:#fff}
+/* 접힘 상태: 활성 점만 보이고 위로 */
+.dot-nav__link:not(.is-active){opacity:0;pointer-events:none;transition:opacity .25s ease}
+.dot-nav__link.is-active{z-index:1}
+
+/* 펼침 */
+.dot-nav:hover .dot-nav__list > li + li,
+.dot-nav:focus-within .dot-nav__list > li + li{margin-top:var(--dot-gap)}
+.dot-nav:hover .dot-nav__link:not(.is-active),
+.dot-nav:focus-within .dot-nav__link:not(.is-active){opacity:1;pointer-events:auto}
+
+.dot-nav__link:not(.is-active):hover::before,
+.dot-nav__link:not(.is-active):focus-visible::before{background:#777}
 .dot-nav__link:focus-visible{outline:1px solid #fff;outline-offset:2px;border-radius:50%}
+
+/* hover 라벨 (펼친 상태에서만) */
 .dot-nav__label{
   position:absolute;top:50%;right:calc(100% + 10px);
   transform:translate(6px,-50%);
@@ -35,15 +57,13 @@
   opacity:0;pointer-events:none;
   transition:opacity .25s ease,transform .25s ease;
 }
-.dot-nav__link:hover .dot-nav__label,
+.dot-nav:hover .dot-nav__link:hover .dot-nav__label,
 .dot-nav__link:focus-visible .dot-nav__label{opacity:1;transform:translate(0,-50%)}
 
-@media (max-width:768px){
-  .dot-nav__list{gap:12px}
-  .dot-nav__link::before{width:6px;height:6px}
-  .dot-nav__link.is-active::before{width:9px;height:9px}
-  .dot-nav__label{display:none}
+/* 모바일·터치 기기: 숨김 */
+@media (max-width:768px),(hover:none){
+  .dot-nav{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .dot-nav__link::before,.dot-nav__label{transition:none}
+  .dot-nav__list > li,.dot-nav__link,.dot-nav__link::before,.dot-nav__label{transition:none}
 }
