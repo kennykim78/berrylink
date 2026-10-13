@@ -1,0 +1,34 @@
+/* VISUAL — Figma 1:36 (1920x652). Image 800x1202 at x560, y=-225 (overflows both sides). */
+.visual{
+  position:relative;
+  z-index:0;
+  height:min(33.959vw,652px);               /* 652 @1920 */
+  pointer-events:none;
+}
+.visual__img{
+  position:absolute;
+  top:max(-11.719vw,-225px);                /* -225 @1920 → bleeds up into INTRO */
+  left:50%;
+  /* x560 = centered · scroll: opacity .7→1, scale .78→1 (--p: 0→1, main.js initScrollScale) */
+  --p:0;
+  opacity:calc(.7 + .3 * var(--p));
+  transform:translateX(-50%) scale(calc(.78 + .22 * var(--p)));
+  transform-origin:50% 40%;
+  will-change:transform,opacity;
+  width:min(41.667vw,800px);                /* 800 */
+  height:auto;
+  aspect-ratio:800/1202;                    /* 1202 tall → bleeds ~325px into Brands */
+  object-fit:cover;
+  max-width:none;
+  display:block;
+}
+@media (max-width:1024px){
+  .visual__img{width:56vw;top:-10vw}
+  .visual{height:44vw}
+}
+@media (max-width:768px){
+  .visual{height:60vw}
+  .visual__img{width:78vw;top:-12vw}
+}
+@media (prefers-reduced-motion:reduce){.visual__img{--p:1}}
+/* NOTE: following sections must be position:relative; z-index:1 to paint above the bleeding image. */

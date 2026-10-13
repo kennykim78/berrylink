@@ -1,0 +1,69 @@
+/* INTRO — Figma 1:35 (1920x1600). Text block starts at y=400.
+   JS 활성(.is-pinnable) 시: 섹션 높이 = 100vh + 스텝 수 × 스텝 길이, 내부 .intro__pin 이 sticky 로 고정됨 */
+.intro{
+  position:relative;
+  z-index:1; /* text stays above the visual image bleeding up into this area */
+  min-height:min(83.334vw,1600px);          /* 1600 @1920 (no-JS fallback) */
+  padding-block:min(20.834vw,400px) 0;      /* 400 @1920 */
+  color:var(--c-text);
+}
+.intro__inner{text-align:center}
+
+/* pinned mode */
+.intro.is-pinnable{
+  --step:38svh;                              /* 스크롤 1스텝(줄 1개) 길이 */
+  min-height:0;
+  padding:0;
+  height:calc(100svh + var(--intro-steps,4) * var(--step));
+}
+.intro.is-pinnable .intro__pin{
+  position:sticky;
+  top:0;
+  height:100svh;
+  display:flex;
+  align-items:center;
+}
+@media (max-width:768px){
+  .intro.is-pinnable{--step:30svh}
+}
+.intro__title{
+  margin:0 0 min(2.084vw,40px);             /* gap 40 */
+  font-family:var(--ff-serif);
+  font-weight:400;
+  font-size:calc(var(--fs-display) * var(--ls-title,1)); /* 96 */
+  text-wrap:balance;
+  line-height:normal;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+.intro__text{
+  margin:0;
+  font-family:var(--ff-sans);
+  font-weight:100;                          /* Thin */
+  font-size:var(--fs-lead);                 /* 32 */
+  line-height:1.6;
+  overflow-wrap:break-word;
+}
+@media (max-width:1024px){
+  .intro__title{font-size:clamp(34px,6vw,64px)}
+  .intro__text{font-size:clamp(16px,2.4vw,24px);font-weight:200}
+}
+@media (max-width:768px){
+  .intro:not(.is-pinnable){min-height:0;padding-block:96px 0}
+  .intro__title{font-size:calc(clamp(30px,8vw,44px) * var(--ls-title,1));margin-bottom:24px}
+  .intro__text{font-size:clamp(15px,4vw,18px)}
+}
+/* ---------- scroll color: #333 → #fff ----------
+   title: 줄 단위 순차 / text: 한 번에 (assets/js/main.js · initScrollColor) */
+.intro{--c-dim:#333}
+.is-pinnable .intro__title .line,
+.is-pinnable .intro__text[data-scroll-color]{
+  color:var(--c-dim);
+  transition:color .6s ease;
+}
+.intro__title .line.is-on,
+.intro__text[data-scroll-color].is-on{color:var(--c-text)}
+.intro__title .line{display:inline}
+@media (prefers-reduced-motion:reduce){
+  .intro__title .line,.intro__text[data-scroll-color]{color:var(--c-text);transition:none}
+}

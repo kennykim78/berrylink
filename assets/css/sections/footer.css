@@ -1,0 +1,38 @@
+/* ========== FOOTER (Figma 16:203 · 1920×415, py 80, content 1400) ========== */
+.site-footer{
+  background:var(--c-bg-inverse);
+  color:var(--c-text-inverse);
+  padding-block:clamp(48px,4.17vw,80px);
+}
+.site-footer__inner{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:40px;
+}
+.site-footer__mail{
+  font-size:var(--fs-mail);
+  font-weight:700;
+  line-height:normal;
+  white-space:nowrap;
+  transition:opacity .2s;
+}
+.site-footer__mail:hover,.site-footer__mail:focus-visible{opacity:.6}
+.site-footer__offices{
+  display:flex;
+  flex-direction:column;
+  gap:clamp(32px,3.18vw,61px);
+  width:min(500px,100%);
+  flex-shrink:0;
+}
+.site-footer__office{display:flex;flex-direction:column;gap:clamp(10px,1.04vw,20px)}
+.site-footer__office-name{font-size:var(--fs-title);font-weight:700;line-height:normal}
+.site-footer__office-addr{font-size:var(--fs-body);font-weight:300;line-height:normal}
+
+@media (max-width:1024px){
+  .site-footer__inner{flex-direction:column;gap:48px}
+  .site-footer__offices{width:100%}
+}
+@media (max-width:480px){
+  .site-footer__mail{white-space:normal;word-break:break-all}
+}

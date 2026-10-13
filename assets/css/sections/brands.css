@@ -1,0 +1,60 @@
+/* BRANDS — Figma 10:7 / 25:363 (1920 기준: 상단 250, 콘텐츠 376, 하단 250 = 876) */
+.brands{
+  position:relative;
+  z-index:1;
+  /* transparent: visual portrait bleeds behind this section (Figma 1:36 → 10:7) */
+  color:var(--c-text);
+  padding:250px 0;
+}
+.brands__title{
+  margin:0 0 40px;
+  font-family:var(--ff-serif);
+  font-weight:400;
+  font-size:64px;
+  line-height:76px;
+  text-align:center;
+  color:var(--c-text);
+}
+/* 4열 그리드 · 로고 크게 (1920 기준 셀 폭 ≈ 305px) */
+.brands__list{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(24px,2.6vw,50px) clamp(20px,3.13vw,60px);
+  max-width:1400px;
+  margin:clamp(24px,3.13vw,60px) auto 0;
+  padding:0;
+  list-style:none;
+}
+.brands__item{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  aspect-ratio:3/1;
+}
+.brands__item img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  transition:opacity .3s;
+}
+.brands__item:hover img{opacity:.7}
+/* 로고 파일 미수급 브랜드 임시 워드마크 */
+.brands__wordmark{
+  font-family:var(--ff-sans);
+  font-weight:700;
+  font-size:clamp(18px,2.3vw,44px);
+  letter-spacing:.06em;
+  color:var(--c-text);
+}
+
+@media (max-width:1919px){
+  .brands__title{font-size:clamp(30px,3.33vw,64px);line-height:1.19}
+}
+@media (max-width:1439px){
+  .brands{padding:clamp(80px,13vw,250px) 0}
+}
+@media (max-width:767px){
+  .brands__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
+  .brands__wordmark{font-size:clamp(18px,5.4vw,28px)}
+}

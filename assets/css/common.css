@@ -1,0 +1,72 @@
+/* ==========================================================
+   berrylink — common tokens & layout
+   Figma base: 1920px desktop / content 1400px
+   ========================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;500;600;700;800&display=swap");
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Serif:wght@400;500&display=swap");
+
+:root{
+  /* color */
+  --c-bg:#000;
+  --c-bg-inverse:#fff;
+  --c-text:#fff;
+  --c-text-inverse:#000;
+  --c-text-sub:rgba(255,255,255,.8);
+
+  /* font */
+  --ff-serif:"Abhaya Libre",Georgia,"Times New Roman",serif;
+  --ff-sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+
+  /* layout */
+  --container:1400px;
+  --gutter:clamp(20px,4vw,40px);
+
+  /* fluid type scale (min @360 → max @1920) */
+  --fs-display:clamp(36px,5vw,96px);   /* 96 */
+  --fs-h2:clamp(30px,3.33vw,64px);   /* Our Brands 64 */
+  --fs-lead:clamp(17px,1.67vw,32px);   /* 32 */
+  --fs-mail:clamp(28px,3.34vw,64px);   /* 64 */
+  --fs-title:clamp(18px,1.25vw,24px);  /* 24 */
+  --fs-body:clamp(14px,1.05vw,20px);   /* 20 */
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--c-bg);
+  color:var(--c-text);
+  font-family:var(--ff-sans);
+  font-size:16px;
+}
+
+.inner{
+  width:100%;
+  max-width:calc(var(--container) + var(--gutter) * 2);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+.blind{
+  position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ---------- i18n: per-language font fallback ----------
+   Abhaya Libre = Latin only → KO: Noto Serif KR / RU: Noto Serif (Cyrillic) */
+:root:lang(ko){
+  --ls-title:.84;      /* intro title scale (KO 글자폭 보정) */
+  --ls-tagline:.78;    /* hero tagline scale (KO 한글 자면 보정) */
+  --ff-serif:"Noto Serif KR","Abhaya Libre",serif;
+}
+:root:lang(ru){
+  --ls-tagline:.72;    /* hero tagline scale (RU 문장 길이 보정) */
+  --ls-title:.92;
+  --ff-serif:"Noto Serif","Abhaya Libre",Georgia,serif;
+  --ff-sans:"Pretendard Variable",Pretendard,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+}
+:lang(ko) body{word-break:keep-all}
