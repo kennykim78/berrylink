@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /_figma/
+Disallow: /_partials/
+
+Sitemap: https://berrylink.io/sitemap.xml
