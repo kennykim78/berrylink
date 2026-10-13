@@ -27,8 +27,9 @@
   .visual{height:44vw}
 }
 @media (max-width:768px){
-  .visual{height:60vw}
-  .visual__img{width:78vw;top:-12vw}
+  /* 모바일: 이미지가 Partner Brands 로 넘치지 않도록 섹션 안에 온전히 배치 + 하단 여백 */
+  .visual{height:auto;padding-bottom:16vw}
+  .visual__img{position:relative;top:0;width:78vw;margin-top:-12vw}
 }
 @media (prefers-reduced-motion:reduce){.visual__img{--p:1}}
 /* NOTE: following sections must be position:relative; z-index:1 to paint above the bleeding image. */
