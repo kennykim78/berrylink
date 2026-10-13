@@ -55,6 +55,7 @@
   .brands{padding:clamp(80px,13vw,250px) 0}
 }
 @media (max-width:767px){
+  .brands{padding-top:12vw}
   .brands__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
   .brands__wordmark{font-size:clamp(18px,5.4vw,28px)}
 }

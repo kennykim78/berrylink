@@ -28,7 +28,7 @@
 }
 @media (max-width:768px){
   /* 모바일: 이미지가 Partner Brands 로 넘치지 않도록 섹션 안에 온전히 배치 + 하단 여백 */
-  .visual{height:auto;padding-bottom:16vw}
+  .visual{height:auto;padding-bottom:4vw}
   .visual__img{position:relative;top:0;width:78vw;margin-top:-12vw}
 }
 @media (prefers-reduced-motion:reduce){.visual__img{--p:1}}
