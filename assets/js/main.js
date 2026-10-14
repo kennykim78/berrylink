@@ -22,91 +22,6 @@
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- pinned scroll color (#333 → #fff) ----------
-     [data-scroll-pin] 섹션에 도달하면 내부(.intro__pin)가 sticky 로 고정되고,
-     고정된 동안의 스크롤 진행도에 따라
-       [data-scroll-lines] : 실제 렌더된 줄 단위(.line)로 순차 점등
-       [data-scroll-color] : 제목이 모두 점등된 뒤 한 번에 점등
-     모두 #fff 가 된 뒤 HOLD 스텝만큼 머문 후 고정 해제 → 다음 섹션으로.
-     스텝 수 = 줄 수 + 본문 1 + HOLD → CSS --intro-steps 로 섹션 높이 결정 */
-  var HOLD = 1;
-  var pinEls = [];
-
-  function splitLines(el) {
-    // 원문(번역 적용 후) 기준으로 단어 span 생성 → offsetTop 으로 줄 그룹핑
-    var text = el.textContent.replace(/\s+/g, ' ').trim();
-    el.innerHTML = '';
-    var words = text.split(' ').map(function (w, i, arr) {
-      var s = document.createElement('span');
-      s.textContent = w + (i < arr.length - 1 ? ' ' : '');
-      el.appendChild(s);
-      return s;
-    });
-    var lines = [], top = null;
-    words.forEach(function (w) {
-      if (w.offsetTop !== top) { lines.push([]); top = w.offsetTop; }
-      lines[lines.length - 1].push(w.textContent);
-    });
-    el.innerHTML = '';
-    el.setAttribute('aria-label', text);
-    return lines.map(function (ws) {
-      var l = document.createElement('span');
-      l.className = 'line';
-      l.setAttribute('aria-hidden', 'true');
-      l.textContent = ws.join('');
-      el.appendChild(l);
-      return l;
-    });
-  }
-
-  function buildPins() {
-    pinEls = Array.prototype.map.call(document.querySelectorAll('[data-scroll-pin]'), function (sec) {
-      var items = [];
-      sec.querySelectorAll('[data-scroll-lines]').forEach(function (el) { items = items.concat(splitLines(el)); });
-      sec.querySelectorAll('[data-scroll-color]').forEach(function (el) { items.push(el); });
-      sec.style.setProperty('--intro-steps', items.length + HOLD);
-      return { sec: sec, items: items };
-    });
-    updatePins();
-  }
-
-  function updatePins() {
-    var vh = window.innerHeight;
-    pinEls.forEach(function (pin) {
-      var r = pin.sec.getBoundingClientRect();
-      var steps = pin.items.length + HOLD;
-      var stepPx = Math.max(1, (r.height - vh) / steps);
-      var u = -r.top / stepPx;                       // 고정 시작 후 진행 스텝
-      pin.items.forEach(function (el, i) {
-        el.classList.toggle('is-on', u >= i + 0.35);
-      });
-    });
-  }
-
-  function initPins() {
-    var secs = document.querySelectorAll('[data-scroll-pin]');
-    if (!secs.length) return;
-    if (reduce) return; // 고정·애니메이션 없이 기본 레이아웃(흰 글씨)
-    secs.forEach(function (sec) { sec.classList.add('is-pinnable'); });
-
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () { updatePins(); ticking = false; });
-    }, { passive: true });
-
-    // 리사이즈/언어변경/폰트로딩 시 줄 재계산
-    var rt;
-    window.addEventListener('resize', function () {
-      clearTimeout(rt);
-      rt = setTimeout(buildPins, 150);
-    });
-    document.addEventListener('i18n:change', buildPins);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildPins);
-    buildPins();
-  }
-
   /* ---------- hero video ----------
      reduced-motion 이면 정지(poster 유지), 자동재생 차단 시 poster(png) 가 그대로 노출됨 */
   function initHeroVideo() {
@@ -174,6 +89,5 @@
   initReveal();
   initDotNav();
   initScrollScale();
-  initPins();
   initHeroVideo();
 })();

@@ -43,7 +43,7 @@
 .brands__wordmark{
   font-family:var(--ff-sans);
   font-weight:700;
-  font-size:clamp(18px,2.3vw,44px);
+  font-size:clamp(28px,3.6vw,72px);
   letter-spacing:.06em;
   color:var(--c-text);
 }
@@ -57,5 +57,5 @@
 @media (max-width:767px){
   .brands{padding-top:12vw}
   .brands__list{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
-  .brands__wordmark{font-size:clamp(18px,5.4vw,28px)}
+  .brands__wordmark{font-size:clamp(24px,7vw,40px)}
 }
