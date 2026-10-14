@@ -1,5 +1,5 @@
 /* berrylink — i18n (KO / EN / RU)
-   - 우선순위: ?lang= → localStorage → 브라우저 언어(ko/ru) → en
+   - 우선순위: ?lang= → localStorage(사용자가 고른 언어) → en(기본)
    - 번역 대상: [data-i18n="key"] (값은 HTML 허용: 줄바꿈 <br> 용) */
 (function () {
   'use strict';
@@ -51,42 +51,13 @@
   function store(lang) { try { localStorage.setItem(KEY, lang); } catch (e) {} }
   function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
 
-  /* ---------- 지역 기반 초기 언어 ----------
-     정적 사이트라 IP 조회 대신 브라우저 정보로 추정 (외부 요청 없음)
-     1) 시간대(지역)  2) 브라우저 언어·지역 태그  → 해당 없으면 en
-     RU 권역 = 러시아 + CIS(벨라루스·카자흐·키르기스·우즈벡·타지크·투르크멘·아르메니아·아제르바이잔·몰도바) */
-  var RU_COUNTRIES = ['RU', 'BY', 'KZ', 'KG', 'UZ', 'TJ', 'TM', 'AM', 'AZ', 'MD'];
-  var RU_LANGS = ['ru', 'be', 'kk', 'ky', 'uz', 'tg', 'tk', 'hy', 'az'];
-  var RU_TZ = /^(Europe\/(Moscow|Kaliningrad|Samara|Volgograd|Saratov|Ulyanovsk|Astrakhan|Kirov|Simferopol|Minsk|Chisinau)|Asia\/(Yekaterinburg|Omsk|Novosibirsk|Barnaul|Tomsk|Novokuznetsk|Krasnoyarsk|Irkutsk|Chita|Yakutsk|Khandyga|Vladivostok|Ust-Nera|Magadan|Sakhalin|Srednekolymsk|Kamchatka|Anadyr|Almaty|Qostanay|Aqtobe|Aqtau|Atyrau|Oral|Qyzylorda|Bishkek|Tashkent|Samarkand|Dushanbe|Ashgabat|Yerevan|Baku))$/;
-  var KO_TZ = /^Asia\/Seoul$/;
-
-  function byTimezone() {
-    var tz = '';
-    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
-    if (KO_TZ.test(tz)) return 'ko';
-    if (RU_TZ.test(tz)) return 'ru';
-    return null;
-  }
-
-  function byBrowserLocale() {
-    var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
-    for (var i = 0; i < list.length; i++) {
-      var parts = String(list[i]).split('-');
-      var lang = parts[0].toLowerCase();
-      var region = (parts[parts.length - 1] || '').toUpperCase();
-      if (lang === 'ko' || region === 'KR') return 'ko';
-      if (RU_LANGS.indexOf(lang) > -1 || RU_COUNTRIES.indexOf(region) > -1) return 'ru';
-    }
-    return null;
-  }
-
-  // 우선순위: ?lang= → 사용자가 직접 고른 언어(localStorage) → 지역(시간대) → 브라우저 언어·지역 → en
+  // 우선순위: ?lang= → 사용자가 직접 고른 언어(localStorage) → en(기본)
   function detect() {
     var q = new URLSearchParams(location.search).get('lang');
     if (q && DICT[q]) return q;
     var s = stored();
     if (s && DICT[s]) return s;
-    return byTimezone() || byBrowserLocale() || DEFAULT;
+    return DEFAULT;
   }
 
   function apply(lang) {
