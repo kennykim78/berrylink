@@ -30,7 +30,9 @@
   .intro__text{font-size:clamp(16px,2.4vw,24px);font-weight:200}
 }
 @media (max-width:768px){
-  .intro{min-height:0;padding-block:96px 0}
+  /* 스크롤 고정 애니메이션 제거 후에도 기존처럼 텍스트가 한 화면(100svh)을 채우고
+     그 아래 화면에서 이미지가 시작되도록 유지 (이미지는 -12vw 만큼 위로 겹쳐 들어옴) */
+  .intro{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:64px}
   .intro__title{font-size:calc(clamp(30px,8vw,44px) * var(--ls-title,1));margin-bottom:24px}
   .intro__text{font-size:clamp(15px,4vw,18px)}
 }
