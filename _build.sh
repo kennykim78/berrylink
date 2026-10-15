@@ -102,7 +102,8 @@ cat <<LD
         },
         "location": [
           { "@type": "Place", "name": "HQ", "address": "510 5th F/L 23, Jungdongbuk-ro, Uichang-gu, Changwon-si, Gyeongsangnam-do, Rep. of KOREA" },
-          { "@type": "Place", "name": "Seoul Office", "address": "210 2nd F/L 10, Nambusunhwan-ro 333-gil, Seocho-gu, Seoul, Rep. of KOREA" }
+          { "@type": "Place", "name": "Seoul Office", "address": "210 2nd F/L 10, Nambusunhwan-ro 333-gil, Seocho-gu, Seoul, Rep. of KOREA" },
+          { "@type": "Place", "name": "Almaty Office", "address": "Business Center 'Atakent City' 15/107, 2nd Floor, Timiryazeva Str., 42, Almaty 050057, Kazakhstan" }
         ],
         "contactPoint": {
           "@type": "ContactPoint",

@@ -16,20 +16,24 @@
       'footer.hq.name': 'HQ',
       'footer.hq.addr': '510 5th F/L 23, Jungdongbuk-ro, Uichang-gu, Changwon-si, Gyeongsangnam-do, Rep. of KOREA',
       'footer.seoul.name': 'Seoul Office',
-      'footer.seoul.addr': '210 2nd F/L 10, Nambusunhwan-ro 333-gil, Seocho-gu, Seoul, Rep. of KOREA'
+      'footer.seoul.addr': '210 2nd F/L 10, Nambusunhwan-ro 333-gil, Seocho-gu, Seoul, Rep. of KOREA',
+      'footer.almaty.name': 'Almaty Office',
+      'footer.almaty.addr': 'Business Center \'Atakent City\' 15/107, 2nd Floor, Timiryazeva Str., 42, Almaty 050057'
     },
     ko: {
       'nav.home': '홈',
       'nav.about': '소개',
       'nav.partners': '파트너',
       'meta.title': 'berrylink | CIS·이슬람권 특화 K‑뷰티 브랜드 기획사',
-      'hero.tagline': 'CIS·이슬람권 특화 K‑뷰티 브랜드 기획사',
+      'hero.tagline': 'CIS·이슬람권 특화<br class="hero__br--m"> K‑뷰티 브랜드 기획사',
       'intro.title': '당신의 K‑뷰티 브랜드를 CIS와 이슬람권의 스타로 만들어 드립니다.',
       'intro.text': '대형 기획사가 글로벌 스타를 발굴하고 키워내듯, 베리링크는 당신의 브랜드를 전담 프로듀싱합니다. 장벽 높은 CIS와 이슬람 시장에서의 성공적인 첫 무대가, 전 세계로 뻗어나가는 확실한 발판이 될 것입니다.',
-      'footer.hq.name': '본사',
-      'footer.hq.addr': '경상남도 창원시 의창구 중동북로 23, 5층 510호',
-      'footer.seoul.name': '서울 사무소',
-      'footer.seoul.addr': '서울특별시 서초구 남부순환로333길 10, 2층 210호'
+      'footer.hq.name': 'HQ',
+      'footer.hq.addr': '510 5th F/L 23, Jungdongbuk-ro, Uichang-gu, Changwon-si, Gyeongsangnam-do, Rep. of KOREA',
+      'footer.seoul.name': 'Seoul Office',
+      'footer.seoul.addr': '210 2nd F/L 10, Nambusunhwan-ro 333-gil, Seocho-gu, Seoul, Rep. of KOREA',
+      'footer.almaty.name': 'Almaty Office',
+      'footer.almaty.addr': 'Business Center \'Atakent City\' 15/107, 2nd Floor, Timiryazeva Str., 42, Almaty 050057'
     },
     ru: {
       'nav.home': 'Главная',
@@ -42,7 +46,9 @@
       'footer.hq.name': 'Головной офис',
       'footer.hq.addr': 'Республика Корея, провинция Кёнсан-Намдо, г. Чханвон, район Ыйчхан-гу, Чундонбук-ро, 23, 5 этаж, офис 510',
       'footer.seoul.name': 'Офис в Сеуле',
-      'footer.seoul.addr': 'Республика Корея, г. Сеул, район Сочхо-гу, Намбусунхван-ро 333-гиль, 10, 2 этаж, офис 210'
+      'footer.seoul.addr': 'Республика Корея, г. Сеул, район Сочхо-гу, Намбусунхван-ро 333-гиль, 10, 2 этаж, офис 210',
+      'footer.almaty.name': 'Офис в г. Алматы',
+      'footer.almaty.addr': 'Бизнес-центр «Atakent City», оф. 15/107, 2-й этаж, ул. Тимирязева, д. 42, г. Алматы, 050057'
     }
   };
   var DEFAULT = 'en';

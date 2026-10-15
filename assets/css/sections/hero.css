@@ -38,6 +38,7 @@
 }
 /* RU: 문장이 길어 콘텐츠 폭 확장 → 2줄 유지 */
 :root:lang(ru) .hero__content{width:72vw;max-width:1300px}
+.hero__br--m{display:none}   /* 모바일 전용 줄바꿈 */
 @keyframes hero-fade{from{opacity:0}to{opacity:1}}
 
 @media (max-width:1024px){
@@ -54,5 +55,9 @@
   :root:lang(ru) .hero__content{width:92vw}
   :root:lang(ru) .hero__tagline{font-size:3.8vw}
   :root:lang(ru) .hero__br{display:inline}
+  .hero__br--m{display:inline}
+  /* KO: 2줄 구성 30px (한 줄 약 9.5em ≈ 285px → 320px 폰도 92vw 안에 들어감) */
+  :root:lang(ko) .hero__content{width:92vw}
+  :root:lang(ko) .hero__tagline{font-size:30px;line-height:1.6}
 }
 @media (prefers-reduced-motion:reduce){.hero__bg,.hero__content{animation:none}}
