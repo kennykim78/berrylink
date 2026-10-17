@@ -2,6 +2,7 @@
 _qa/
 _logo_src/
 _unused/
+*.zip
 
 # 미사용 원본 영상 (웹용은 hero-crystal.mp4)
 assets/images/hero/hero-crystal_original.mp4
