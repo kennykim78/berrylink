@@ -51,6 +51,7 @@ cat <<HEAD
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="ko_KR">
   <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="ar_AR">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="berrylink | K-Beauty Brand Production Agency for CIS &amp; Islamic Markets">
   <meta name="twitter:description" content="Debuting K-Beauty Brands as Stars in the CIS and Islamic Regions.">
@@ -109,7 +110,7 @@ cat <<LD
           "@type": "ContactPoint",
           "contactType": "business inquiries",
           "email": "info@berrylink.io",
-          "availableLanguage": ["English", "Korean", "Russian"]
+          "availableLanguage": ["English", "Korean", "Russian", "Arabic"]
         }
       },
       {
@@ -117,7 +118,7 @@ cat <<LD
         "@id": "${SITE_URL}#website",
         "url": "${SITE_URL}",
         "name": "berrylink",
-        "inLanguage": ["en", "ko", "ru"],
+        "inLanguage": ["en", "ko", "ru", "ar"],
         "publisher": { "@id": "${SITE_URL}#organization" }
       },
       {

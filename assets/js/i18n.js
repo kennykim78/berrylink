@@ -1,4 +1,4 @@
-/* berrylink — i18n (KO / EN / RU)
+/* berrylink — i18n (KO / EN / RU / AR)
    - 우선순위: ?lang= → localStorage(사용자가 고른 언어) → en(기본)
    - 번역 대상: [data-i18n="key"] (값은 HTML 허용: 줄바꿈 <br> 용) */
 (function () {
@@ -49,8 +49,25 @@
       'footer.seoul.addr': 'Республика Корея, г. Сеул, район Сочхо-гу, Намбусунхван-ро 333-гиль, 10, 2 этаж, офис 210',
       'footer.almaty.name': 'Офис в г. Алматы',
       'footer.almaty.addr': 'Бизнес-центр «Atakent City», оф. 15/107, 2-й этаж, ул. Тимирязева, д. 42, г. Алматы, 050057'
+    },
+    ar: {
+      'nav.home': 'الرئيسية',
+      'nav.about': 'من نحن',
+      'nav.partners': 'شركاؤنا',
+      'meta.title': 'berrylink | وكالة إنتاج علامات K-Beauty التجارية لأسواق رابطة الدول المستقلة والعالم الإسلامي',
+      'hero.tagline': 'وكالة إنتاج علامات K-Beauty التجارية<br class="hero__br"> لأسواق رابطة الدول المستقلة والعالم الإسلامي',
+      'intro.title': 'نُطلق علامات K-Beauty التجارية لتصبح نجومًا في رابطة الدول المستقلة والعالم الإسلامي.',
+      'intro.text': 'كما تصنع كبرى وكالات الترفيه نجوم البوب العالميين، تتولّى Berrylink حصريًا إدارة علامتك التجارية الكورية وإنتاجها لتعتلي المسرح الكبير. وسيكون الظهور الأول الناجح في أسواق رابطة الدول المستقلة والأسواق الإسلامية الصعبة منصّة الانطلاق المثالية لتوسّعك حول العالم.',
+      'footer.hq.name': 'المقر الرئيسي',
+      'footer.hq.addr': 'مكتب 510، الطابق الخامس، 23 شارع جونغدونغبوك، حي أويتشانغ، مدينة تشانغوون، مقاطعة غيونغسانغ الجنوبية، جمهورية كوريا',
+      'footer.seoul.name': 'مكتب سيول',
+      'footer.seoul.addr': 'مكتب 210، الطابق الثاني، 10 شارع نامبوسونهوان 333 غيل، حي سوتشو، سيول، جمهورية كوريا',
+      'footer.almaty.name': 'مكتب ألماتي',
+      'footer.almaty.addr': 'مركز الأعمال «Atakent City»، مكتب 15/107، الطابق الثاني، 42 شارع تيميريازيفا، ألماتي 050057'
     }
   };
+  // 오른쪽→왼쪽(RTL) 언어: 레이아웃(헤더·도트내비·푸터 배치)은 유지하고 번역 텍스트에만 dir="rtl" 적용
+  var RTL = { ar: true };
   var DEFAULT = 'en';
   var KEY = 'berrylink-lang';
 
@@ -68,11 +85,13 @@
 
   function apply(lang) {
     var dict = DICT[lang] || DICT[DEFAULT];
+    var dir = RTL[lang] ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     document.title = dict['meta.title'];
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var v = dict[el.getAttribute('data-i18n')];
       if (v != null) el.innerHTML = v;
+      el.dir = dir;
     });
     document.querySelectorAll('[data-lang]').forEach(function (btn) {
       var on = btn.getAttribute('data-lang') === lang;

@@ -5,6 +5,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;500;600;700;800&display=swap");
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Noto+Serif:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500&family=Noto+Sans+Arabic:wght@100..700&display=swap");
 
 :root{
   /* color */
@@ -69,4 +70,13 @@ body{
   --ff-serif:"Noto Serif","Abhaya Libre",Georgia,serif;
   --ff-sans:"Pretendard Variable",Pretendard,"Segoe UI",Roboto,"Noto Sans",sans-serif;
 }
+/* AR: Noto Naskh Arabic(본문 서체 표준 나스흐체) / Noto Sans Arabic
+   라틴 폰트를 앞에 둠 → 아랍 문자는 라틴 폰트에 글리프가 없어 Noto 로 폴백, K‑Beauty·Berrylink 등 라틴 단어는 EN 과 동일 서체 */
+:root:lang(ar){
+  --ls-tagline:.86;
+  --ls-title:.86;
+  --ff-serif:"Abhaya Libre","Noto Naskh Arabic",serif;
+  --ff-sans:"Pretendard Variable",Pretendard,"Noto Sans Arabic","Segoe UI",Tahoma,sans-serif;
+}
+:root:lang(ar) .intro__text{font-weight:300}   /* 아랍 문자는 Thin 에서 가독성 저하 */
 :lang(ko) body{word-break:keep-all}
