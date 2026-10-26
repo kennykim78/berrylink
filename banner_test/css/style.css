@@ -1,0 +1,532 @@
+/* ==========================================================================
+   K-Beauty Responsive Accordion Banners
+   Infinite sliding accordion (indexB-style)
+
+   Architecture:
+   - Wide viewport: 5 cards visible, one active in the center (800x500 at full size)
+     (4:5 - 4:5 - [4:2.5 Active] - 4:5 - 4:5). The outer 2 are clipped by the viewport edges
+     and stay grayscale.
+   - 1201px - 1480px: same 5 cards, center 3 sized to (viewport - 120px) so the outer 2 peek in
+   - <= 1200px: active card fully visible, the 2 side cards peek in (grayscale)
+   - <= 768px: single card per view
+   - The whole track slides with transform; widths animate with the same duration/easing.
+   - Typography: Cormorant Garamond & Montserrat
+   - Strict 0 CTA Button Enforcement
+   ========================================================================== */
+
+/* --- 1. CSS Custom Properties & Design Tokens --- */
+:root {
+  /* Color Palette (Clean Luxury White Theme) */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-surface: #F8FAFC;
+  --color-text-header: #0F172A;
+  --color-text-header-desc: #64748B;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: rgba(255, 255, 255, 0.92);
+  --color-text-muted: rgba(255, 255, 255, 0.72);
+  --color-accent-gold: #92400E;
+  --color-accent-glow: rgba(0, 0, 0, 0.08);
+  --color-border-subtle: rgba(0, 0, 0, 0.08);
+  --color-border-focus: rgba(0, 0, 0, 0.25);
+
+  /* Typography */
+  --font-headline: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
+  --font-subtext: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Slider Layout & Timing */
+  --slide-ms: 650ms;                            /* keep in sync with MOVE_MS in slider.js */
+  --slide-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-cinematic: cubic-bezier(0.25, 1, 0.5, 1);
+  --border-radius-card: 18px;
+  --gap-slider: 16px;
+  --slider-max: 1632px;                         /* max width of the center 3 cards: 800px active (4:2.5) + 2 x 400px (4:5) + 2 gaps */
+  --controls-max: 1400px;                       /* progress bar / buttons width */
+  --slider-pad: 60px;                           /* viewport space kept beside the center 3 so the outer cards peek in */
+  --slider-peek: clamp(24px, 7vw, 80px);        /* <= 1200px: visible strip of each side card */
+
+  /* Drop Shadows & Glow */
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-text: none;
+  --shadow-subtext: none;
+}
+
+/* --- 2. Global Resets & Base Styles --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #FFFFFF;
+  color: var(--color-text-header);
+  font-family: var(--font-subtext);
+}
+
+body {
+  min-height: 100vh;
+  background: #FFFFFF;
+  color: var(--color-text-header);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 40px);
+}
+
+/* --- 3. Header Styling --- */
+.site-header {
+  padding: clamp(24px, 4vw, 48px) 0 clamp(16px, 2.5vw, 28px);
+  text-align: center;
+}
+
+.header-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.header-badge {
+  display: inline-block;
+  font-family: var(--font-subtext);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #92400E;
+  background: rgba(217, 119, 6, 0.08);
+  border: 1px solid rgba(217, 119, 6, 0.24);
+  padding: 5px 14px;
+  border-radius: 30px;
+  margin-bottom: 14px;
+}
+
+.header-title {
+  font-family: var(--font-headline);
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-text-header);
+  margin-bottom: 10px;
+}
+
+.header-description {
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--color-text-header-desc);
+}
+
+/* --- 4. Main Slider Section --- */
+.main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: clamp(20px, 3vw, 40px);
+}
+
+/* Full-bleed band so the outer cards can extend past the 1400px content width */
+.slider-section {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  overflow-x: clip;
+  padding: 0 0 40px;   /* room for card shadows (clip only affects the x axis) */
+}
+
+.slider-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  user-select: none;
+  container-type: inline-size;
+}
+
+/* --- 5. Sliding Track (PC: 5 cards, <=1200: 3 cards) --- */
+.slider-track {
+  /*
+    Active Card:    4:2.5 horizontal proportion (width 1.6H, height H)
+    Inactive Cards: 4:5 vertical proportion     (width 0.8H, height H)
+    Center 3 cards: 0.8H + 1.6H + 0.8H + 2G = 3.2H + 2G  <=  available width
+    H = (available - 2G) / 3.2, available = min(1632px, container - 2 * side space) -> H max 500px
+  */
+  --card-h: calc((min(var(--slider-max), 100cqw - 2 * var(--slider-pad)) - 2 * var(--gap-slider)) / 3.2);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--gap-slider);
+  width: 100%;
+  height: var(--card-h);
+  position: relative;
+  will-change: transform;
+  transition: transform var(--slide-ms) var(--slide-ease);
+}
+
+/* Disables motion for silent re-centering / resize (toggled by slider.js) */
+.slider-track.no-anim,
+.slider-track.no-anim *,
+.slider-track.no-anim *::before,
+.slider-track.no-anim *::after {
+  transition: none !important;
+}
+
+.slider-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: calc(var(--card-h) * 0.8);   /* 4:5 inactive */
+  height: 100%;
+  border-radius: var(--border-radius-card);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-bg-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: width var(--slide-ms) var(--slide-ease),
+              transform 0.4s ease,
+              border-color 0.4s ease,
+              box-shadow 0.4s ease;
+}
+
+/* Active Card: 4:2.5 horizontal proportion */
+.slider-card.is-active {
+  width: calc(var(--card-h) * 1.6);
+  cursor: default;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Inactive Card Hover Feedback */
+.slider-card:not(.is-active):hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* Hidden width probes read by slider.js (share the card width rules) */
+.slider-card.slider-probe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: none !important;
+}
+
+/* <= 1200px: 3 cards. The active card is fully visible, the 2 side cards peek in
+   (clipped by the viewport edges). */
+@media (max-width: 1200px) {
+  .slider-track {
+    --view-w: calc(100cqw - 2 * (var(--slider-peek) + var(--gap-slider)));
+    --card-h: calc(var(--view-w) / 1.6);
+  }
+}
+
+/* --- 6. Card Media & Background Graphics --- */
+.card-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.01);
+  transition: transform 0.85s var(--ease-cinematic),
+              filter 0.65s var(--ease-cinematic);
+  will-change: transform, filter;
+}
+
+/* Default: grayscale (outer edge cards). Active card and its direct neighbours keep their colors. */
+.slider-card .card-image {
+  filter: grayscale(100%) brightness(0.95);
+}
+
+.slider-card.is-active .card-image,
+.slider-card.is-prev .card-image,
+.slider-card.is-next .card-image {
+  filter: grayscale(0%) brightness(1);
+}
+
+/* <= 1200px: the side cards ARE the edge cards, so they turn grayscale */
+@media (max-width: 1200px) {
+  .slider-card.is-prev .card-image,
+  .slider-card.is-next .card-image {
+    filter: grayscale(100%) brightness(0.95);
+  }
+}
+
+.slider-card:hover .card-image {
+  transform: scale(1.04);
+}
+
+/* Scrim Overlays: inactive cards get a soft shade, the active card a soft bottom gradient <= 44% */
+.card-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.65s var(--ease-cinematic), opacity 0.65s var(--ease-cinematic);
+}
+
+.slider-card:not(.is-active) .card-scrim {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(0, 0, 0, 0.18) 35%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  opacity: 1;
+}
+
+.slider-card.is-active .card-scrim {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.48) 0%,
+    rgba(0, 0, 0, 0.22) 22%,
+    transparent 44%
+  );
+  opacity: 1;
+}
+
+/* --- 7. 2-Tier Text Layer & Dynamic Reveal Mechanics --- */
+.card-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(16px, 2.2vw, 30px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(6px, 0.9vw, 10px);
+}
+
+.card-brand-name {
+  font-family: var(--font-subtext);
+  font-size: clamp(0.68rem, 0.8vw, 0.82rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #FFFFFF;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 3px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-category {
+  font-family: var(--font-subtext);
+  font-size: clamp(0.68rem, 0.8vw, 0.8rem);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tier 1: Headline (always visible on all cards) */
+.card-headline {
+  font-family: var(--font-headline);
+  font-size: clamp(1.25rem, 1.9vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+  margin: 0;
+  text-wrap: balance;
+  transition: font-size 0.65s var(--ease-cinematic),
+              transform 0.65s var(--ease-cinematic);
+}
+
+.slider-card:not(.is-active) .card-headline {
+  font-size: clamp(0.95rem, 1.2vw, 1.3rem);
+  line-height: 1.2;
+  opacity: 0.95;
+}
+
+/* Tier 2: Subtext wrapper - inactive cards hide the subtext */
+.slider-card:not(.is-active) .card-subtext-wrapper {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  overflow: hidden;
+  transition: max-height 0.4s ease,
+              opacity 0.3s ease,
+              transform 0.3s ease;
+}
+
+/* Active card: subtext smoothly revealed */
+.slider-card.is-active .card-subtext-wrapper {
+  max-height: 110px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: max-height 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.15s,
+              opacity 0.5s ease 0.2s,
+              transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
+}
+
+.card-subtext {
+  font-family: var(--font-subtext);
+  font-size: clamp(0.82rem, 0.95vw, 0.94rem);
+  font-weight: 400;
+  line-height: 1.48;
+  color: #FFFFFF;
+  margin-top: clamp(6px, 1vw, 12px);
+  max-width: 620px;
+}
+
+/* --- 8. Controls: progress bar + play/pause + prev/next (indexB style) --- */
+.slider-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 40px auto 0;
+  max-width: var(--controls-max);
+}
+
+@media (max-width: 1480px) {
+  .slider-controls {
+    max-width: calc(100cqw - 2 * var(--slider-pad));
+  }
+}
+
+.slider-progress {
+  flex: 1 1 auto;
+  height: 5px;
+  border-radius: 10px;
+  background: #EFEFEF;
+  overflow: hidden;
+}
+
+.slider-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: #333333;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.slider-toggle,
+.slider-nav-prev,
+.slider-nav-next {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.slider-toggle:hover,
+.slider-nav-prev:hover,
+.slider-nav-next:hover {
+  color: #92400E;
+}
+
+.slider-toggle:focus-visible,
+.slider-nav-prev:focus-visible,
+.slider-nav-next:focus-visible {
+  outline: 2px solid #D4AF37;
+  outline-offset: 3px;
+}
+
+.slider-toggle .icon-play { display: none; }
+.slider-toggle.is-paused .icon-play { display: block; }
+.slider-toggle.is-paused .icon-pause { display: none; }
+
+/* --- 9. Mobile Responsive Layout (@media max-width: 768px) --- */
+@media (max-width: 768px) {
+  .slider-section {
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+  }
+  .slider-track {
+    height: auto;
+  }
+  .slider-card,
+  .slider-card.is-active {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+  .slider-card .card-subtext-wrapper {
+    max-height: 110px;
+    opacity: 1;
+    transform: translateY(0);
+    overflow: visible;
+    pointer-events: auto;
+  }
+  .card-content {
+    padding: clamp(14px, 4vw, 20px);
+  }
+  .card-headline {
+    font-size: clamp(1.15rem, 4.5vw, 1.5rem);
+    line-height: 1.2;
+  }
+  .card-subtext {
+    font-size: clamp(0.76rem, 3.2vw, 0.88rem);
+    line-height: 1.42;
+    margin-top: 6px;
+  }
+  .slider-controls {
+    max-width: 100%;
+    margin-top: 24px;
+  }
+}
+
+/* --- 10. Footer Styling --- */
+.site-footer {
+  text-align: center;
+  padding: 24px 0 32px;
+  color: #94A3B8;
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
